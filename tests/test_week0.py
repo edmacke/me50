@@ -2,6 +2,7 @@ import einstein.einstein as einstein
 import faces.faces as faces
 import indoor.indoor as indoor
 import playback.playback as playback
+import tip.tip as tip
 
 
 def test_indoor1():
@@ -50,3 +51,9 @@ def test_einstein2():
 
 def test_einstein3():
     assert 4500000000000000000 == einstein.convert(50)
+
+def test_tip1():
+    assert 50 == tip.dollars_to_float('$50.00')
+
+def test_tip2():
+    assert 0.15 == tip.percent_to_float('15%')
