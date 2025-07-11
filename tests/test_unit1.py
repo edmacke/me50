@@ -1,3 +1,4 @@
+import einstein.einstein as einstein
 import faces.faces as faces
 import indoor.indoor as indoor
 import playback.playback as playback
@@ -37,3 +38,15 @@ def test_smile2():
 
 def test_smile3():
     assert 'Hello 🙂 Goodbye 🙁' == faces.fix_msg('Hello :) Goodbye :(')
+
+
+def test_einstein1():
+    assert 90000000000000000 == einstein.convert(1)
+
+
+def test_einstein2():
+    assert 1260000000000000000 == einstein.convert(14)
+
+
+def test_einstein3():
+    assert 4500000000000000000 == einstein.convert(50)

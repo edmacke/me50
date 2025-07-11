@@ -5,8 +5,10 @@ def main():
 
     print(msg)
 
+
 def fix_msg(msg):
-    return msg.replace(':(', '🙁').replace(':)','🙂')
+    return msg.replace(':(', '🙁').replace(':)', '🙂')
+
 
 if __name__ == '__main__':
     main()
