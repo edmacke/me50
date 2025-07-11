@@ -6,7 +6,7 @@ def main():
     print(msg)
 
 def fix_msg(msg):
-    return msg.con
+    return msg.replace(':(', '🙁').replace(':)','🙂')
 
 if __name__ == '__main__':
     main()
