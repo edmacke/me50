@@ -1,11 +1,11 @@
 def main():
-    msg = input('Yell something: ')
+    msg = input('Enter something: ')
     msg = fix_msg(msg)
     print(msg)
 
 
 def fix_msg(msg):
-    return msg.lower()
+    return msg.replace(' ', '...')
 
 
 if __name__ == '__main__':
