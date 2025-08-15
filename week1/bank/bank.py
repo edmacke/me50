@@ -4,9 +4,9 @@
 
 
 def main():
-    msg = input('Enter a greeting: ')
+    x = input('Enter a greeting: ')
 
-    print(answer(msg))
+    print(answer(x))
 
 
 def answer(msg):
