@@ -6,10 +6,6 @@ from week1.deep import deep as deep
 
 
 def test_42():
-    assert 'Yes' == deep.answer('42')
-
-
-def test_42():
     assert 'Yes' == deep.answer(' 42 ')
 
 
@@ -115,6 +111,7 @@ def test_meal_convert_730():
 def test_meal_convert_1930():
     assert 19.5 == meal.convert('19:30')
 
+
 def test_meal_breakfast():
     assert 'breakfast time' == meal.mealtime('7:00')
     assert 'breakfast time' == meal.mealtime('7:30')
@@ -122,12 +119,14 @@ def test_meal_breakfast():
     assert '' == meal.mealtime('6:59')
     assert '' == meal.mealtime('8:01')
 
+
 def test_meal_lunch():
     assert 'lunch time' == meal.mealtime('12:00')
     assert 'lunch time' == meal.mealtime('13:00')
     assert 'lunch time' == meal.mealtime('13:00')
     assert '' == meal.mealtime('13:01')
     assert '' == meal.mealtime('11:59')
+
 
 def test_meal_dinner():
     assert 'dinner time' == meal.mealtime('18:00')
