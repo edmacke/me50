@@ -1,3 +1,5 @@
+# Replace a string that has an emoji with the character representation of that emoji
+
 def main():
     msg = input('Enter something with a smile or frown: ')
 
