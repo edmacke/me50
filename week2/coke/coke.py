@@ -6,7 +6,7 @@ def main():
     while True:
         value = int(input('Insert Coin: '))
 
-        if value == 5 or value == 10 or value == 25:
+        if is_valid_coin(value):
             total += value
 
         if total >= 50:
@@ -15,6 +15,10 @@ def main():
         print(f'Amount Due: {50 - total}')
 
     print(f'Change Owed: {total - 50}')
+
+
+def is_valid_coin(value):
+    return value == 5 or value == 10 or value == 25
 
 
 if __name__ == '__main__':
