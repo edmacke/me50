@@ -1,4 +1,4 @@
-from week4 import adieu
+from week4.adieu import adieu
 
 def test_names():
     assert 'Ed' == adieu.join_names(['Ed'])

@@ -1,8 +1,8 @@
-from week0.einstein import einstein as einstein
-from week0.faces import faces as faces
-from week0.indoor import indoor as indoor
-from week0.playback import playback as playback
-from week0.tip import tip as tip
+from week0.einstein import einstein
+from week0.faces import  faces
+from week0.indoor import  indoor
+from week0.playback import  playback
+from week0.tip import tip
 
 
 def test_indoor1():
