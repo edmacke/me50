@@ -7,7 +7,7 @@ def main():
 
 
 def parse(s):
-    match = re.search(f'^<iframe .*src="(?:https?)://(?:www\.)?youtube\.com/embed/([a-zA-Z0-9]+)".*</iframe>$', s)
+    match = re.search(r'^<iframe .*src="(?:https?)://(?:www\.)?youtube\.com/embed/([a-zA-Z0-9]+)".*</iframe>$', s)
     if not match:
         return None
 
