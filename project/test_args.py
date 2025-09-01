@@ -9,6 +9,10 @@ def test_no_args():
     with pytest.raises(SystemExit):
         get_args()
 
+    with pytest.raises(SystemExit):
+        sys.argv = ['test_args']
+        get_args()
+
 
 def test_valid_args_short():
     sys.argv = ['test_args', '-i', 'id', '-s', 'secret', '-u', 'userid']

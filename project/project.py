@@ -1,43 +1,96 @@
+import re
+
 from tabulate import tabulate
 
-import api
 import args
-import test_api
-from api import Track
+from client import SpotifyClient
 
 
-def main():
-    duplicate_tracks: list[Track] = list()
-
+def main(client: SpotifyClient = None):
     # Get arguments from command line
     user_args = args.get_args()
 
-    # Create instance of Spotify API object and perform authorization
-    spotify_api = api.API(client_id=user_args['id'], client_secret=user_args['secret'], username=user_args['user'])
-    spotify_api.api = test_api.SpotifyMock(user_args['user'])
-    # spotify_api.connect()
+    # Get a handle to the Spotify API
+    if not client:
+        client = SpotifyClient()
+        client.connect(client_id=user_args['id'], client_secret=user_args['secret'])
+
+    # Get all tracks for all playlists
+    tracks = get_all_tracks(client=client, user=user_args['user'])
+
+    # Find duplicate tracks
+    duplicate_tracks = find_duplicate_tracks(tracks)
+
+    # Print duplicate tracks
+    print_list(duplicate_tracks)
+
+
+def normalize_name(name: str) -> str:
+    # Convert name to lower case
+    name = name.lower()
+
+    # Remove any instances of remaster, e.g. "Title - 2013 Remaster" will return "title"
+    return re.sub(r'( - \d\d\d\d remaster)$', '', name)
+
+
+def get_all_tracks(client: SpotifyClient, user: str) -> list[dict]:
+    tracks: list[dict] = list()
 
     # Get all playlists belonging to user
-    playlists = spotify_api.get_playlists()
+    playlists = client.get_playlists(user=user)
 
-    # For each playlist, find duplicate tracks
+    # For each playlist found, get all tracks
     for playlist in playlists:
-        tracks = spotify_api.get_tracks_for_playlist(playlist)
+        tracks = client.get_tracks_for_playlist(playlist)
 
-        duplicate_tracks.extend([track for track in tracks if tracks.count(track) > 1])
-        duplicate_tracks.extend(tracks)
+    # Compute keys for returned tracks
+    for track in tracks:
+        track['duplicate_key'] = f'{track['playlist'].lower()}-{track['artist'].lower()}-{normalize_name(track['name'])}'
+        track['sort_key'] = f'{track['playlist'].lower()}-{track['artist'].lower()}-{track['name'].lower()}-{track['album'].lower()}'
 
-    print_list(tracks)
+    # Return list of all tracks for all playlists
+    return tracks
 
 
-def print_list(tracks: list[Track]):
-    headers = {'playlist_name'}
+def find_duplicate_tracks(tracks: list[dict]) -> list[dict]:
+    track_counts: dict = dict()
 
-    sorted_list = sorted(tracks, key=lambda item: item.sort_key)
+    # For each track, either create or increment a counter based on track's "duplicate key" which
+    # uniquely identifies track for purposes of duplicate checking
+    for track in tracks:
+        key = track['duplicate_key']
+        if key in track_counts:
+            track_counts[key] += 1
+        else:
+            track_counts[key] = 1
 
-    sorted_dict = [vars(item) for item in sorted_list]
+    # Create new dictionary having only tracks with > 1 instances
+    track_counts = {key: value for key, value in track_counts.items() if value > 1}
 
-    print(tabulate(sorted_dict, headers='keys', tablefmt='grid'))
+    # Return list of items whose keys are in the dictionary of tracks with > 1 instances
+    return [t for t in tracks if t['duplicate_key'] in track_counts.keys()]
+
+
+def create_print_tracks(tracks: list[dict]) -> list[dict]:
+    print_tracks: list[dict] = list()
+
+    for track in tracks:
+        item = dict()
+        item['Playlist'] = track['playlist']
+        item['Artist'] = track['artist']
+        item['Title'] = track['name']
+        item['Album'] = track['album']
+        print_tracks.append(item)
+
+    return print_tracks
+
+
+def print_list(tracks: list[dict]):
+    sorted_tracks = sorted(tracks, key=lambda x: x['sort_key'])
+
+    print_tracks = create_print_tracks(sorted_tracks)
+
+    print(tabulate(print_tracks, headers='keys', tablefmt='grid'))
 
 
 if __name__ == '__main__':
