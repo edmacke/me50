@@ -17,17 +17,23 @@ def convert(s):
     to_hrs = check_hours(match.group(5), match.group(8))
     to_mins = check_minutes(match.group(7))
 
-    return f'{from_hrs}:{from_mins:02} to {to_hrs}:{to_mins:02}'
+    return f'{from_hrs:02}:{from_mins:02} to {to_hrs:02}:{to_mins:02}'
 
 
 def check_hours(value, ampm):
     hours = int(value)
 
-    if 1 <= hours <= 12:
-        if ampm.upper() == 'AM':
-            return hours
-        else:
-            return hours + 12
+    match ampm.upper():
+        case 'AM':
+            if 1 <= hours <= 11:
+                return hours
+            if hours == 12:
+                return 0
+        case 'PM':
+            if 1 <= hours <= 11:
+                return hours + 12
+            if hours == 12:
+                return 12
 
     raise ValueError(f'Value of {value} is invalid')
 
@@ -40,8 +46,6 @@ def check_minutes(value):
 
     if 0 <= mins <= 59:
         return mins
-
-    raise ValueError(f'Value of {value} is invalid')
 
     raise ValueError(f'Value of {value} is invalid')
 
